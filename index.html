@@ -13,6 +13,7 @@
       <ul v-else>
         <li v-for="character in characterList" :key="character.name">
           {{ character.name }}
+          <button @click="favCharacter(character.name)">Favorite</button>
         </li>
       </ul>
       <p>
@@ -20,6 +21,20 @@
           >{{ character.name}} {{ index < characterList.length - 1 ? ", " : ""
           }}
         </span>
+      </p>
+
+      <hr />
+
+      <h1>Favorite characters</h1>
+      <ul>
+        <li v-for="character in favoriteCharacters">{{ character}}</li>
+      </ul>
+
+      <h2>New Character</h2>
+      <!-- can use keyup.enter to add a character -->
+      <input type="text" v-model="newCharacter" @keyup.enter="addACharacter" />
+      <!-- <button @click="addACharacter">Add</button> -->
+      <p v-if="newCharacter.length !== 0">{{newCharacter}} will be added</p>
       </p>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
@@ -33,7 +48,29 @@
             { name: "Jin" },
             { name: "Master Raven" },
           ],
+          favoriteCharacters: [],
+          newCharacter: "",
         }),
+        methods: {
+          favCharacter(character) {
+            if (this.favoriteCharacters.includes(character)) {
+              return;
+            }
+            this.favoriteCharacters.push(character);
+          },
+          addACharacter() {
+            const chr = { name: this.newCharacter };
+            if (
+              this.characterList.some((chr) => chr.name === this.newCharacter)
+            ) {
+              return;
+            } else if (this.newCharacter.length === 0) {
+              return;
+            }
+            this.characterList.push(chr);
+            this.newCharacter = "";
+          },
+        },
       }).mount("#app");
     </script>
   </body>
