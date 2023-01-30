@@ -8,11 +8,14 @@
   </head>
   <body>
     <div id="app">
-      <p v-if="message.length % 2 === 0">Even: {{message.toUpperCase()}} App</p>
-      <p v-else>Odd: {{message}} App</p>
-      <ul>
-        <li v-for="number in listOfNumbers" :key="number">{{number}}</li>
-      </ul>
+      <h1>Counter</h1>
+      <p>{{ count }}</p>
+      <button @click="incrementCount">Increment Count</button>
+      <h1>{{incrementAmount}}</h1>
+      <div>
+        <label for="incrementAmount">Increment by:</label>
+        <input type="number" v-model="incrementAmount" />
+      </div>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -20,9 +23,17 @@
       const app = createApp({
         data() {
           return {
-            message: "Hello it works",
-            listOfNumbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            count: 10,
+            incrementAmount: 1,
           };
+        },
+        methods: {
+          changeIncrementAmount(event) {
+            this.incrementAmount = event.target.value;
+          },
+          incrementCount() {
+            this.count += this.incrementAmount;
+          },
         },
       });
 
