@@ -4,7 +4,37 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Tekken 7</title>
   </head>
-  <body></body>
+  <body>
+    <div id="app">
+      <h1>King of Iron Fist Tournament 7 characters</h1>
+      <p v-if="characterList.length === 0">No characters</p>
+      <ul v-else>
+        <li v-for="character in characterList" :key="character.name">
+          {{ character.name }}
+        </li>
+      </ul>
+      <p>
+        <span v-for="(character, index) in characterList"
+          >{{ character.name}} {{ index < characterList.length - 1 ? ", " : ""
+          }}
+        </span>
+      </p>
+    </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script>
+      const { createApp } = Vue;
+      Vue.createApp({
+        data: () => ({
+          characterList: [
+            { name: "King" },
+            { name: "Kazuya" },
+            { name: "Jin" },
+            { name: "Master Raven" },
+          ],
+        }),
+      }).mount("#app");
+    </script>
+  </body>
 </html>
