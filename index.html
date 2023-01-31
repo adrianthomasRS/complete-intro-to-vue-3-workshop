@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tekken 7</title>
   </head>
@@ -25,17 +23,31 @@
 
       <hr />
 
+      <!-- Fav Character List -->
       <h1>Favorite characters</h1>
       <ul>
         <li v-for="character in favoriteCharacters">{{ character}}</li>
       </ul>
 
+      <!-- New Character -->
       <h2>New Character</h2>
       <!-- can use keyup.enter to add a character -->
-      <input type="text" v-model="newCharacter" @keyup.enter="addACharacter" />
+      <p>Name of new character</p>
+      <input type="text" v-model="newCharacter.name" />
       <!-- <button @click="addACharacter">Add</button> -->
-      <p v-if="newCharacter.length !== 0">{{newCharacter}} will be added</p>
+      <p>Tier of new character</p>
+      <input type="text" v-model="newCharacter.teir" @keyup.enter="addACharacter(newCharacter)" />
+      <p v-if="newCharacter.name.length !== 0">{{newCharacter.name}} will be added</p>
       </p>
+
+      <hr>
+
+      <!-- Teir List-->
+      <h2>Character Teir List</h2>
+      <!-- <pre>{{rankCharacters}}</pre> -->
+      <ul>
+        <li v-for="rank in rankCharacters">{{rank.name}} is teir: {{rank.teir}}</li>
+      </ul>
     </div>
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
@@ -43,33 +55,59 @@
       Vue.createApp({
         data: () => ({
           characterList: [
-            { name: "King" },
-            { name: "Kazuya" },
-            { name: "Jin" },
-            { name: "Master Raven" },
+            { name: "King", teir: 'B', points: 5},
+            { name: "Kazuya", teir: 'B', points: 5},
+            { name: "Jin", teir: 'B', points: 5},
+            { name: "Master Raven", teir: 'A', points: 6 },
           ],
           favoriteCharacters: [],
-          newCharacter: "",
+          newCharacter: {name: '', teir: '', points: 0},
         }),
+        computed: {
+          rankCharacters() {
+            return this.characterList.sort((a, b) => b.points - a.points)
+          }
+        },
         methods: {
-          favCharacter(character) {
-            if (this.favoriteCharacters.includes(character)) {
+          favCharacter(c) {
+            // checks
+            if (this.favoriteCharacters.includes(c)) {
               return;
             }
-            this.favoriteCharacters.push(character);
+            this.favoriteCharacters.push(c);
           },
-          addACharacter() {
-            const chr = { name: this.newCharacter };
+          addACharacter(nc) {
+            // checks
             if (
-              this.characterList.some((chr) => chr.name === this.newCharacter)
+              this.characterList.some((nc) => nc.name === this.newCharacter.name)
             ) {
               return;
-            } else if (this.newCharacter.length === 0) {
+            } else if ((nc.name.length && nc.teir.length) === 0) {
               return;
             }
-            this.characterList.push(chr);
-            this.newCharacter = "";
+
+            const listWithPointsAdded = this.setTeirPoints(nc)
+            this.characterList.push(listWithPointsAdded);
+            this.newCharacter = {name: '', teir: '', points: 0};
           },
+          setTeirPoints(c) {
+            if (c.teir === 'A') {
+              c.points = 6
+            } else if (c.teir === 'B') {
+              c.points = 5
+            } else if (c.teir === 'C') {
+              c.points = 4
+            } else if (c.teir === 'D') {
+              c.points = 3
+            } else if (c.teir === 'E') {
+              c.points = 2
+            } else if (c.teir === 'F') {
+              c.points = 1
+            } else if (c.teir === 'S') {
+              c.points = 7
+            } 
+            return c
+          }
         },
       }).mount("#app");
     </script>
